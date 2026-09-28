@@ -48,6 +48,16 @@ se testa), **roda os comandos pra verificar** e gera:
 
 Não instala nem baixa nada, não sobe serviços, não chama APIs externas e não commita.
 
+### `/kirby:handoff`: salvar e retomar sessão
+
+- **Salvar** (`/kirby:handoff`): grava `.claude/handoffs/AAAA-MM-DD-HHMM-<tarefa>.md` com
+  objetivo, onde parou, o que funcionou (com evidência), o que **não** funcionou e por
+  quê, o que falta tentar, decisões e o próximo passo. Um arquivo por handoff; o
+  diretório entra no `.git/info/exclude` (ignore local, fora do repo).
+- **Retomar** (`/kirby:handoff retomar`): lê o handoff como registro histórico, não
+  como instrução; confere com o git o que mudou desde então; propõe o próximo passo
+  e espera você confirmar.
+
 ## Hooks
 
 ### `protect-paths` — não mexa na régua
