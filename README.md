@@ -16,6 +16,25 @@ Harness pessoal pro Claude Code. Como o Kirby: engole um problema e fica com a h
 /plugin install kirby@kirby
 ```
 
+## Skills
+
+### `/kirby:task`: um fluxo pra toda mudança de código
+
+Classifica a tarefa por **tipo** (`feature`, `change`, `fix`, `refactor`) e
+**tamanho** (`trivial` → `large`). O tipo define o primeiro movimento; o
+tamanho, quanta cerimônia roda. Duas paradas com você: aprovar o plano (a partir
+de `standard`) e confirmar o commit.
+
+| Tipo | Primeiro movimento | Testes existentes |
+|---|---|---|
+| `feature` | teste do comportamento novo | intocados |
+| `change` | atualizar os testes do comportamento antigo | só os do comportamento que muda |
+| `fix` | teste que falha reproduzindo o bug | intocados |
+| `refactor` | confirmar tudo verde | intocados |
+
+Antes de planejar, o agente ancora nos padrões do repo (nomes, erros, log, acesso
+a dados, testes), com exemplo real `arquivo:linha`, ou diz que não existe.
+
 ## Hooks
 
 ### `protect-paths` — não mexa na régua
