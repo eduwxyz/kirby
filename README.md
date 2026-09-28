@@ -58,6 +58,16 @@ Não instala nem baixa nada, não sobe serviços, não chama APIs externas e nã
   como instrução; confere com o git o que mudou desde então; propõe o próximo passo
   e espera você confirmar.
 
+### `/kirby:learn`: lição vira melhoria permanente
+
+Garimpa a sessão (correções suas, erros que custaram, fatos não óbvios, regra
+ignorada), filtra (muda comportamento? não é óbvio? não está escrito?) e propõe
+cada lição com evidência e destino, no degrau mais leve que resolve:
+
+`CLAUDE.md` do repo → instruções globais → skill nova → hook (só se o texto já falhou) → o próprio kirby.
+
+Grava só o que você aprovar; skill, hook ou mudança no kirby viram um `/kirby:task` à parte.
+
 ## Hooks
 
 ### `protect-paths` — não mexa na régua
