@@ -49,6 +49,32 @@ thresholds.yaml
 É um quebra-molas, não um cofre: um script Python que abre o arquivo pra escrita
 passa. A garantia final é o review do MR.
 
+### `tests-green` — não encerra com teste vermelho
+
+Se a sessão editou arquivos, o agente só consegue encerrar a resposta com os
+testes passando. Falhou → a resposta é bloqueada e a saída da suíte volta pro
+agente corrigir. Depois de 3 bloqueios seguidos, libera e avisa você (sem loop
+infinito).
+
+**Só cobra o que a sessão quebrou.** Antes da primeira edição, o hook roda a
+suíte uma vez e anota se ela já estava vermelha. Se estava, ele não bloqueia no
+fim, só avisa você; senão o agente sairia consertando o que ninguém pediu. Custo:
+uma rodada da suíte rápida por sessão, na primeira edição.
+
+**Qual comando roda:** primeira linha de `.claude/kirby-test`, se existir;
+senão, detecção automática nesta ordem: alvo `test` no `Makefile`, script
+`test` do `package.json` (npm/pnpm/yarn/bun), `pytest` (via uv/poetry se
+houver lock), `mix test`, `go test ./...`, `cargo test`.
+
+```bash
+node hooks/tests-green.js detect   # mostra o comando que seria usado aqui
+```
+
+- Suíte lenta? Aponte um subconjunto rápido: `echo "pytest -q -m fast" > .claude/kirby-test`.
+- Pra desligar num repo: `echo off > .claude/kirby-test`.
+- Timeout de 540s (`KIRBY_TEST_TIMEOUT`); estourou → libera e avisa.
+- Edições feitas só via `Bash` (ex.: `sed -i`) não marcam a sessão.
+
 ## Desenvolvimento
 
 ```
