@@ -75,6 +75,22 @@ node hooks/tests-green.js detect   # mostra o comando que seria usado aqui
 - Timeout de 540s (`KIRBY_TEST_TIMEOUT`); estourou → libera e avisa.
 - Edições feitas só via `Bash` (ex.: `sed -i`) não marcam a sessão.
 
+### `block-destructive` — nada sem volta
+
+Bloqueia no `Bash` o que não dá pra desfazer. Não precisa de configuração.
+
+| Área | Bloqueia | Permite |
+|---|---|---|
+| git push | `-f`/`--force`/`+ref`, `--mirror`, `--no-verify`; force (mesmo com lease) ou delete em `main`, `master`, `develop`, `prod(uction)`, `release/*` | push normal; `--force-with-lease` em branch sua |
+| git local | `reset --hard`, `checkout .`, `checkout -f`, `restore .`, `switch -f` **se houver mudança não commitada**; `clean -f`; `stash clear`; `commit/merge --no-verify` | tudo isso com a árvore limpa; `clean -n`; descartar um arquivo específico |
+| rm | fora do projeto (exceto temporários), o projeto em si ou um diretório acima, `.git`, `rm -rf *` na raiz, alvo com variável indefinida | qualquer coisa dentro do projeto; `/tmp/...` |
+| banco | `DROP TABLE/DATABASE/SCHEMA`, `TRUNCATE`, `DELETE`/`UPDATE` sem `WHERE` (psql, mysql, sqlite3, duckdb, clickhouse) | consultas e escritas com `WHERE` |
+| infra | `kubectl delete/drain`, `helm uninstall`, `terraform destroy`, `apply -auto-approve`, `state rm`, `aws … delete-*/terminate-*`, `aws s3 rm --recursive/rb`, `gcloud … delete`, `docker system prune`, `docker volume rm/prune` | leitura, `plan`, `apply` com revisão |
+| HTTP | `curl -X DELETE` em host externo | `DELETE` em `localhost` |
+
+- **Liberar:** `KIRBY_ALLOW_DESTRUCTIVE=1 claude`, ou você mesmo roda o comando.
+- SQL passado por arquivo (`psql -f`) ou por stdin não é inspecionado.
+
 ## Desenvolvimento
 
 ```
