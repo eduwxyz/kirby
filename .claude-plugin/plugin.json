@@ -1,0 +1,7 @@
+{
+  "name": "kirby",
+  "description": "Harness pessoal pro Claude Code: hooks, skills e evals pro dia a dia de engenharia de agentes.",
+  "version": "0.1.0",
+  "author": { "name": "eduwxyz" },
+  "license": "MIT"
+}
