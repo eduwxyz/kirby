@@ -35,6 +35,19 @@ de `standard`) e confirmar o commit.
 Antes de planejar, o agente ancora nos padrões do repo (nomes, erros, log, acesso
 a dados, testes), com exemplo real `arquivo:linha`, ou diz que não existe.
 
+### `/kirby:onboard`: prepara um repo
+
+Rode uma vez por repo. Lê o código (CI primeiro: é a fonte de verdade sobre como
+se testa), **roda os comandos pra verificar** e gera:
+
+- `CLAUDE.md`: até ~60 linhas; comandos verificados, mapa, convenções que fogem
+  do padrão, o que não mexer, armadilhas. Se já existe, propõe mudanças em vez de
+  reescrever.
+- `.claude/kirby-test`: o comando rápido que o `tests-green` roda (<30s de preferência).
+- `.claude/kirby-protected`: a régua do repo (datasets, judges, thresholds, lint, CI).
+
+Não instala nem baixa nada, não sobe serviços, não chama APIs externas e não commita.
+
 ## Hooks
 
 ### `protect-paths` — não mexa na régua
