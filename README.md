@@ -11,10 +11,68 @@ Harness pessoal pro Claude Code. Como o Kirby: engole um problema e fica com a h
 
 ## Instalação
 
+Uma vez por máquina:
+
 ```
-/plugin marketplace add ~/Documents/projects/kirby
+/plugin marketplace add eduwxyz/kirby
 /plugin install kirby@kirby
 ```
+
+O repo é privado: o git da máquina precisa ter acesso a ele. Pra desenvolver o
+próprio kirby, use o caminho local (`/plugin marketplace add ~/Documents/projects/kirby`)
+ou carregue direto da pasta com `claude --plugin-dir ~/Documents/projects/kirby`.
+
+Pra atualizar: `claude plugin update kirby@kirby`.
+
+## Como usar
+
+### Uma vez por repo
+
+1. Abra o Claude na **raiz** do repo (os hooks leem a configuração de lá).
+2. Rode `/kirby:onboard`. Ele gera `CLAUDE.md`, `.claude/kirby-test` e `.claude/kirby-protected`.
+3. Revise com `git diff`:
+   - **A régua está certa?** Protege o que diz se o trabalho está bom (datasets
+     rotulados, thresholds, lint, CI), não o que está sendo desenvolvido. Num repo
+     de judge, os prompts dos judges são o produto; a régua são os exemplos
+     rotulados.
+   - **O teste é rápido?** Roda em toda resposta com edição: idealmente < 30s.
+   - **O CLAUDE.md diz algo que o agente não descobriria sozinho?** Corte o genérico.
+4. Decida o que vai pro repo do time: o `CLAUDE.md` vale commitar; os arquivos
+   `kirby-*` só servem a quem usa o kirby. Pra deixá-los locais, acrescente
+   `.claude/kirby-*` no `.git/info/exclude`.
+
+### Toda tarefa
+
+1. Abra a sessão na raiz do repo. Continuação? `/kirby:handoff retomar`.
+2. Peça a mudança normalmente; a skill `task` entra sozinha (ou `/kirby:task <pedido>`).
+3. Confira a classificação na primeira linha (ex.: `change · standard`); discorde na hora se for o caso.
+4. **Parada 1, plano** (`standard`/`large`): olhe os padrões citados e o "como vamos saber que está pronto".
+5. Implementação: os hooks vigiam sozinhos. Se um bloquear algo legítimo, rode
+   você mesmo ou abra o Claude com `KIRBY_ALLOW_PROTECTED=1` /
+   `KIRBY_ALLOW_DESTRUCTIVE=1` (vale pra sessão inteira; use só pra aquilo).
+6. **Parada 2, entrega:** leia o "Verificado" e o "Ficou de fora"; confirme o commit.
+7. Push e MR são com você: o kirby nunca faz push.
+
+### Fim de sessão
+
+- Tarefa não terminou → `/kirby:handoff`.
+- Corrigiu o agente ou algo custou caro pra descobrir → `/kirby:learn`.
+
+### De vez em quando
+
+- `CLAUDE.md` passou de ~60 linhas → enxugue.
+- Repo mudou bastante → `/kirby:onboard` de novo (com CLAUDE.md existente, ele propõe mudanças em vez de reescrever).
+- O `learn` apontou problema no próprio kirby → vira uma `task` no repo do kirby.
+
+### Cola
+
+| Momento | Comando |
+|---|---|
+| Repo novo | `/kirby:onboard` |
+| Começar ou continuar | `/kirby:handoff retomar` |
+| Trabalhar | peça normalmente (ou `/kirby:task`) |
+| Parar no meio | `/kirby:handoff` |
+| Aprendeu algo | `/kirby:learn` |
 
 ## Skills
 
